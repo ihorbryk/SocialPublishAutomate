@@ -4,27 +4,84 @@
 	<div id="poststuff">
 		<div id="post-body" class="metabox-holder columns-2">
 
+			<h2><?php _e('Accounts', self::$text_domain);?></h2>
 			<div id="post-body-content" style="position: relative;">
 				<div class="meta-box-sortables ui-sortable">
 					<div class="tablenav top">
 						<div class="alignleft actions">
-							<a href="#TB_inline?width=400&height=250&inlineId=my-content-id" class="button button-primary thickbox">+ <?php _e('Add account', self::$text_domain);?></a>
+							<a href="#TB_inline?width=400&height=300&inlineId=add_account" class="button button-primary thickbox">+ <?php _e('Add account', self::$text_domain);?></a>
 						</div>
 					</div>
 					<table class="wp-list-table widefat fixed striped">
 						<thead>
 							<tr>
 								<th class="column-title column-primary">#</th>
-								<th class="column-title column-primary"><?php _e('User id', self::$text_domain);?></th>
+								<th class="column-title column-primary"><?php _e('Account name', self::$text_domain);?></th>
+								<th class="column-title column-primary"><?php _e('Access ID', self::$text_domain);?></th>
+								<th class="column-title column-primary"><?php _e('Access Token', self::$text_domain);?></th>
 							</tr>
 						</thead>
 						<tbody class="the-list">
+							<?php $accounts = $this->account->get_all(); ?>
+
+							<?php foreach ($accounts as $account) : ?>
+
+								<tr>
+									<td><?php echo $account->id;?></td>
+									<td><?php echo $account->name;?></td>
+									<td><?php echo $account->account_id;?></td>
+									<td><?php echo $account->token;?></td>
+									<td class="alignright">
+										<?php $link = add_query_arg( array(
+											'delete_account' => 'delete',
+											'id' => $account->id,
+										) ); ?>
+
+										<a class="button" href="<?php echo $link; ?>"><span class="dashicons dashicons-trash"></span></a>
+									</td>
+								</tr>
+
+							<?php endforeach; ?>
+						</tbody>
+					</table>
+				</div>
+
+
+				<h2><?php _e('Groups', self::$text_domain);?></h2>
+				<div class="meta-box-sortables ui-sortable">
+					<div class="tablenav top">
+						<div class="alignleft actions">
+							<a href="#TB_inline?width=400&height=250&inlineId=add_group" class="button button-primary thickbox">+ <?php _e('Add account', self::$text_domain);?></a>
+						</div>
+					</div>
+					<table class="wp-list-table widefat fixed striped">
+						<thead>
 							<tr>
-								<td>Hello</td>
+								<th class="column-title column-primary">#</th>
+								<th class="column-title column-primary"><?php _e('Group name', self::$text_domain);?></th>
+								<th class="column-title column-primary"><?php _e('Group ID', self::$text_domain);?></th>
 							</tr>
-							<tr>
-								<td>world</td>
-							</tr>
+						</thead>
+						<tbody class="the-list">
+							<?php $groups = $this->group->get_all(); ?>
+
+							<?php foreach ($groups as $group) : ?>
+
+								<tr>
+									<td><?php echo $group->id;?></td>
+									<td><?php echo $group->name;?></td>
+									<td><?php echo $group->group_id;?></td>
+									<td class="alignright">
+										<?php $link = add_query_arg( array(
+											'delete_group' => 'delete',
+											'id' => $group->id,
+										) ); ?>
+
+										<a class="button" href="<?php echo $link; ?>"><span class="dashicons dashicons-trash"></span></a>
+									</td>
+								</tr>
+
+							<?php endforeach; ?>
 						</tbody>
 					</table>
 				</div>
@@ -63,35 +120,86 @@
 	</div>	
 </div>
 
-<div id="my-content-id" style="display:none;">
+<div id="add_account" style="display:none;">
 	<p>
-		<table class="widefat">
-			<tr>
-				<td class="alignright">
-					<label for="">
-						<strong><?php _e('User id:', self::$text_domain);?></strong>
-					</label>
-				</td>
-				<td>
-					<input type="text" name="user_id">
-				</td>
-			</tr>
-			<tr>
-				<td class="alignright">
-					<label for="">
-						<strong><?php _e('User tocken:', self::$text_domain);?></strong>
-					</label>
-				</td>
-				<td>
-					<input type="text" name="token">
-				</td>
-			</tr>
-			<tr>
-				<td></td>
-				<td>
-					<input type="submit" value="<?php _e('Save', self::$text_domain);?>">
-				</td>
-			</tr>
-		</table>
+		<h2>Add account</h2>
+		<form  method="post">
+			<input type="hidden" name="add_spa_account">
+			<table class="widefat">
+				<tr>
+					<td class="alignright">
+						<label for="">
+							<strong><?php _e('Name:', self::$text_domain);?></strong>
+						</label>
+					</td>
+					<td>
+						<input type="text" name="name">
+					</td>
+				</tr>
+				<tr>
+					<td class="alignright">
+						<label for="">
+							<strong><?php _e('ID:', self::$text_domain);?></strong>
+						</label>
+					</td>
+					<td>
+						<input type="text" name="account_id">
+					</td>
+				</tr>
+				<tr>
+					<td class="alignright">
+						<label for="">
+							<strong><?php _e('Token:', self::$text_domain);?></strong>
+						</label>
+					</td>
+					<td>
+						<input type="text" name="token">
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="submit" value="<?php _e('Save', self::$text_domain);?>">
+					</td>
+				</tr>
+			</table>
+		</form>
+	</p>
+</div>
+
+<div id="add_group" style="display:none;">
+	<p>
+		<h2>Add group</h2>
+		<form  method="post">
+			<input type="hidden" name="add_spa_group">
+			<table class="widefat">
+				<tr>
+					<td class="alignright">
+						<label for="">
+							<strong><?php _e('Group name:', self::$text_domain);?></strong>
+						</label>
+					</td>
+					<td>
+						<input type="text" name="name">
+					</td>
+				</tr>
+				<tr>
+					<td class="alignright">
+						<label for="">
+							<strong><?php _e('ID:', self::$text_domain);?></strong>
+						</label>
+					</td>
+					<td>
+						<input type="text" name="group_id">
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="submit" value="<?php _e('Save', self::$text_domain);?>">
+					</td>
+				</tr>
+			</table>
+		</form>
 	</p>
 </div>
