@@ -9,7 +9,7 @@
 				<div class="meta-box-sortables ui-sortable">
 					<div class="tablenav top">
 						<div class="alignleft actions">
-							<a href="#TB_inline?width=400&height=300&inlineId=add_account" class="button button-primary thickbox">+ <?php _e('Add account', self::$text_domain);?></a>
+							<a href="#TB_inline?width=400&inlineId=add_account" class="button button-primary thickbox">+ <?php _e('Add account', self::$text_domain);?></a>
 						</div>
 					</div>
 					<table class="wp-list-table widefat fixed striped">
@@ -19,6 +19,8 @@
 								<th class="column-title column-primary"><?php _e('Account name', self::$text_domain);?></th>
 								<th class="column-title column-primary"><?php _e('Access ID', self::$text_domain);?></th>
 								<th class="column-title column-primary"><?php _e('Access Token', self::$text_domain);?></th>
+								<th class="column-title column-primary"><?php _e('Social network', self::$text_domain);?></th>
+								<th class="column-title column-primary"></th>
 							</tr>
 						</thead>
 						<tbody class="the-list">
@@ -31,6 +33,14 @@
 									<td><?php echo $account->name;?></td>
 									<td><?php echo $account->account_id;?></td>
 									<td><?php echo $account->token;?></td>
+									<td>
+										<?php if ( $account->network == 1) : ?>
+											Facebook
+										<?php endif; ?>
+										<?php if ( $account->network == 2) : ?>
+											Vk
+										<?php endif; ?>
+									</td>
 									<td class="alignright">
 										<?php $link = add_query_arg( array(
 											'delete_account' => 'delete',
@@ -60,6 +70,7 @@
 								<th class="column-title column-primary">#</th>
 								<th class="column-title column-primary"><?php _e('Group name', self::$text_domain);?></th>
 								<th class="column-title column-primary"><?php _e('Group ID', self::$text_domain);?></th>
+								<th class="column-title column-primary"></th>
 							</tr>
 						</thead>
 						<tbody class="the-list">
@@ -71,6 +82,14 @@
 									<td><?php echo $group->id;?></td>
 									<td><?php echo $group->name;?></td>
 									<td><?php echo $group->group_id;?></td>
+									<td>
+										<?php if ( $group->network == 1) : ?>
+											Facebook
+										<?php endif; ?>
+										<?php if ( $group->network == 2) : ?>
+											Vk
+										<?php endif; ?>
+									</td>
 									<td class="alignright">
 										<?php $link = add_query_arg( array(
 											'delete_group' => 'delete',
@@ -91,27 +110,41 @@
 				<div class="postbox">
 				<H2 class="hndle"><?php _e('Settings', self::$text_domain);?></H2>
 					<div class="inside">
-						<?php $terms = $this->get_terms(); ?>
-						
-						<p>
-							<label>
-								<strong><?php _e('Select tag:', self::$text_domain);?></strong>
-							</label>
+
+						<?php $link = add_query_arg( array(
+							'page' => 'spa_main_page.php',
+						) ); ?>
+
+						<form method="post" action="<?php echo $link;?>">
 							
-							<select id="" name="">
-								<?php foreach ($terms as $term) : ?>
-								<option value="<?php echo $term['id'];?>"><?php echo $term['name'];?></option>
-								<?php endforeach; ?>
-							</select>
-						</p>
+							<input type="hidden" name="save_spa_settings">
 
-						<p>
-							<label for="">
-								<strong><?php _e('Time period (in sec)', self::$text_domain);?></strong>
-							</label>
+							<?php $terms = $this->get_terms(); ?>
 
-							<input type="text" name="time_period">
-						</p>
+							<p>
+								<label>
+									<strong><?php _e('Select tag:', self::$text_domain);?></strong>
+								</label>
+
+								<select id="" name="triger_term_id">
+									<?php foreach ($terms as $term) : ?>
+									<option value="<?php echo $term['id'];?>"><?php echo $term['name'];?></option>
+									<?php endforeach; ?>
+								</select>
+							</p>
+
+							<p>
+								<label for="">
+									<strong><?php _e('Time period (in sec)', self::$text_domain);?></strong>
+								</label>
+
+								<input type="text" name="time_period">
+							</p>
+
+							<p>
+								<input type="submit" class="button button-primary" value="<?php _e('Save', self::$text_domain);?>">
+							</p>
+						</form>
 					</div>
 				</div>
 			</div>
@@ -157,11 +190,25 @@
 					</td>
 				</tr>
 				<tr>
+					<td class="alignright">
+						<label for="network">
+							<strong><?php _e('Network:', self::$text_domain);?></strong>
+						</label>
+					</td>
+					<td>
+						<select id="network" name="network">
+							<option value="1">Facebook</option>
+							<option value="2">Vk</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
 					<td></td>
 					<td>
 						<input type="submit" value="<?php _e('Save', self::$text_domain);?>">
 					</td>
 				</tr>
+				
 			</table>
 		</form>
 	</p>
@@ -191,6 +238,19 @@
 					</td>
 					<td>
 						<input type="text" name="group_id">
+					</td>
+				</tr>
+				<tr>
+					<td class="alignright">
+						<label for="network">
+							<strong><?php _e('Network:', self::$text_domain);?></strong>
+						</label>
+					</td>
+					<td>
+						<select id="network" name="network">
+							<option value="1">Facebook</option>
+							<option value="2">Vk</option>
+						</select>
 					</td>
 				</tr>
 				<tr>
