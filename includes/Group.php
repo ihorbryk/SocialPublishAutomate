@@ -27,9 +27,10 @@ class Group
 	{
 
 		global $wpdb;
+		$table_name = self::$table_name;
 		$result = $wpdb->query("
 				INSERT INTO
-				{$this->table_name}
+				{$table_name}
 				(name, group_id, network)
 				VALUE
 				('{$name}', '{$group_id}', '{$network}')
@@ -39,13 +40,15 @@ class Group
 	public function delete( $id )
 	{
 		global $wpdb;
-		$wpdb->query("DELETE FROM {$this->table_name} WHERE id = {$id}");
+		$table_name = self::$table_name;
+		$wpdb->query("DELETE FROM {$table_name} WHERE id = {$id}");
 	}
 
 	public function get_all()
 	{
 		global $wpdb;
-		$result = $wpdb->get_results("SELECT * FROM {$this->table_name}");
+		$table_name = self::$table_name;
+		$result = $wpdb->get_results("SELECT * FROM {$table_name}");
 		return $result;
 	}
 

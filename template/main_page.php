@@ -138,7 +138,7 @@
 									<strong><?php _e('Time period (in sec)', self::$text_domain);?></strong>
 								</label>
 
-								<input type="text" name="time_period">
+								<input type="text" name="time_period" value="<?php if ( null !== get_option('time_period') ) { echo get_option('time_period'); }?>">
 							</p>
 
 							<p>

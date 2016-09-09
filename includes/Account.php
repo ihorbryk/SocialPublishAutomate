@@ -27,9 +27,10 @@ class Account
 	public function add($name, $account_id, $token, $network)
 	{
 		global $wpdb;
+		$table_name = self::$table_name;
 		$result = $wpdb->query("
 				INSERT INTO
-				{$this->table_name}
+				{$table_name}
 				(name, account_id, token, network)
 				VALUE
 				('{$name}', '{$account_id}', '{$token}', '{$network}')
@@ -40,13 +41,15 @@ class Account
 	public function delete( $id )
 	{
 		global $wpdb;
-		$wpdb->query("DELETE FROM {$this->table_name} WHERE id = {$id}");
+		$table_name = self::$table_name;
+		$wpdb->query("DELETE FROM {$table_name} WHERE id = {$id}");
 	}
 
 	public function get_all()
 	{
 		global $wpdb;
-		$result = $wpdb->get_results("SELECT * FROM {$this->table_name}");
+		$table_name = self::$table_name;
+		$result = $wpdb->get_results("SELECT * FROM {$table_name}");
 		return $result;
 	}
 

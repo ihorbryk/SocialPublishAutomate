@@ -41,7 +41,8 @@ class Publisher
 		if ( empty( $name ) ) {
 			$name = get_the_title( $post_id );
 		}
-		$picture = (wp_get_attachment_image_src( get_post_thumbnail_id(), 'full'))[0];
+		$picture = wp_get_attachment_image_src( get_post_thumbnail_id(), 'full');
+		$picture = $picture[0];
 		if ( empty( $picture ) ) {
 			$picture = '';
 		}

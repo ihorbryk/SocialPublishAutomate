@@ -33,25 +33,23 @@ class SocialPublishAutomate
 
 			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-			$sql = "CREATE TABLE " . $this->account->table_name . " (
+			$sql = "CREATE TABLE " . Account::$table_name . " (
 				id mediumint(9) NOT NULL AUTO_INCREMENT,
 				name tinytext NOT NULL,
 				account_id text NOT NULL,
 				token text NOT NULL,
 				network int NOT NULL,
-				UNIQUE KEY id (id)
-
+				UNIQUE KEY (id)
 			);";
 
 			dbDelta($sql);
 
-			$sql = "CREATE TABLE " . $this->group->table_name . " (
+			$sql = "CREATE TABLE " . Group::$table_name . " (
 				id mediumint(9) NOT NULL AUTO_INCREMENT,
 				name tinytext NOT NULL,
 				group_id text NOT NULL,
 				network int NOT NULL,
-				UNIQUE KEY id (id)
-
+				UNIQUE KEY (id)
 			);";
 
 			dbDelta($sql);
@@ -59,8 +57,9 @@ class SocialPublishAutomate
 		});
 
 		if ( isset( $_POST['save_spa_settings'] ) ) {
-			add_option( 'triger_term_id', $_POST['triger_term_id'] );
-			add_option( 'time_period', $_POST['time_period'] );
+			update_option( 'triger_term_id', $_POST['triger_term_id'] );
+			$time_period = intval( $_POST['time_period'] );
+			update_option( 'time_period', $time_period );
 		}
 
 	}
