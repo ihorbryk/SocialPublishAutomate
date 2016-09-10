@@ -13,6 +13,9 @@ class SocialPublishAutomate
 	public $group;
 	public $publisher;
 
+	/**
+	 * SocialPublishAutomate constructor.
+	 */
 	public function __construct()
 	{
 		require_once 'includes/Account.php';
@@ -66,7 +69,7 @@ class SocialPublishAutomate
 
 	/**
 	 * Register admin pages
-	 *
+	 * 
 	 */
 	public function register_admin_pages()
 	{
@@ -152,6 +155,7 @@ class SocialPublishAutomate
 			$description = sanitize_text_field( $_POST['spa_custom_description']  );
 			update_post_meta( $post_id, 'spa_custom_description', $description  );
 		}
+		
 		if ( isset( $_POST['spa_custom_message'] ) ) {
 			$message = sanitize_text_field( $_POST['spa_custom_message']  );
 			update_post_meta( $post_id, 'spa_custom_message', $message  );
