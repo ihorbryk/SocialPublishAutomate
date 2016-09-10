@@ -19,7 +19,7 @@ class Publisher_facebook
 			$out = curl_exec($curl);
 			curl_close($curl);
 
-			file_put_contents('log.txt', $out . "\n", FILE_APPEND);
+			file_put_contents('spa_log.txt', $out . " -- " . date('j m Y H:i:s') . " -- " . "\n", FILE_APPEND);
 		}, 10, 7 );
 	}
 
@@ -38,18 +38,9 @@ class Publisher_facebook
 				$description = $description;
 				$destination = $group->group_id;
 
-				$curl = curl_init();
-				curl_setopt($curl, CURLOPT_URL, "https://graph.facebook.com/v2.7/{$destination}/feed");
-				curl_setopt($curl, CURLOPT_RETURNTRANSFER,true);
-				curl_setopt($curl, CURLOPT_POST, true);
-				curl_setopt($curl, CURLOPT_POSTFIELDS, "access_token={$this->token}&message={$this->message}&link={$this->link}&name={$this->name}&description={$this->description}&picture={$this->picture}");
-				$out = curl_exec($curl);
-				curl_close($curl);
-
-				file_put_contents('log.txt', $out . "\n***\n", FILE_APPEND);
 
 				if ( !isset( $time_stamp ) ) {
-					$time_stamp = 30;
+					$time_stamp = 0;
 				}
 
 				wp_schedule_single_event( time() + $time_stamp, 'post_to_facebook', array( $message, $link, $name, $picture, $description, $token, $destination ) );

@@ -44,7 +44,6 @@ class SocialPublishAutomate
 				network int NOT NULL,
 				UNIQUE KEY (id)
 			);";
-
 			dbDelta($sql);
 
 			$sql = "CREATE TABLE " . Group::$table_name . " (
@@ -54,7 +53,6 @@ class SocialPublishAutomate
 				network int NOT NULL,
 				UNIQUE KEY (id)
 			);";
-
 			dbDelta($sql);
 
 		});
