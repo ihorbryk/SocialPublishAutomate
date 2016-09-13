@@ -8,11 +8,23 @@ class Account
 	{
 		if ( isset( $_POST['add_spa_account'] ) ) {
 			$name = $_POST['name'];
+			$client_id = $_POST['client_id'];
+			$client_secret = $_POST['client_secret'];
 			$network = $_POST['network'];
-			$account_id = $_POST['account_id'];
 			$token = $_POST['token'];
 
-			$this->add($name, $account_id, $token, $network);
+			$this->add($name, $client_id, $client_secret,  $token, $network);
+		}
+
+		if ( isset( $_POST['update_spa_account'] ) ) {
+			$id = $_POST['account_id'];
+			$name = $_POST['name'];
+			$client_id = $_POST['client_id'];
+			$client_secret = $_POST['client_secret'];
+			$network = $_POST['network'];
+			$token = $_POST['token'];
+
+			$this->update($id, $name, $client_id, $client_secret,  $token, $network);
 		}
 
 		if ( isset( $_GET['delete_account'] ) ) {
@@ -24,18 +36,40 @@ class Account
 	 * Add new account to database
 	 *
 	 */
-	public function add($name, $account_id, $token, $network)
+	public function add($name, $client_id, $client_secret,  $token, $network)
 	{
 		global $wpdb;
 		$table_name = self::$table_name;
 		$result = $wpdb->query("
 				INSERT INTO
 				{$table_name}
-				(name, account_id, token, network)
+				(name, client_id, client_secret,  token, network)
 				VALUE
-				('{$name}', '{$account_id}', '{$token}', '{$network}')
+				('{$name}', '{$client_id}', '{$client_secret}', '{$token}', '{$network}')
 			");
 
+	}
+
+	/**
+	 * Update account
+	 *
+	 * @param mixed $id
+	 * @param mixed $name
+	 * @param mixed $client_id
+	 * @param mixed $client_secret
+	 * @param mixed $token
+	 * @param mixed $network
+	 */
+	public function update($id, $name, $client_id, $client_secret,  $token, $network)
+	{
+		global $wpdb;
+		$table_name = self::$table_name;
+		$result = $wpdb->query("
+				UPDATE
+				{$table_name}
+				SET name='{$name}', client_id='{$client_id}', client_secret='{$client_secret}',  token='{$token}', network='{$network}'
+				WHERE id = {$id}
+			");
 	}
 
 	public function delete( $id )
@@ -53,7 +87,15 @@ class Account
 		return $result;
 	}
 
-	static public function get_users_by_network( $network_id )
+	public static function update_token($id, $token)
+	{
+		global $wpdb;
+		$table_name = self::$table_name;
+		$result = $wpdb->get_results("UPDATE {$table_name} SET token='{$token}' WHERE id={$id}");
+		return $result;
+	}
+
+	public static function get_users_by_network( $network_id )
 	{
 		global $wpdb;
 		$table_name = self::$table_name;

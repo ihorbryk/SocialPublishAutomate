@@ -39,7 +39,8 @@ class SocialPublishAutomate
 			$sql = "CREATE TABLE " . Account::$table_name . " (
 				id mediumint(9) NOT NULL AUTO_INCREMENT,
 				name tinytext NOT NULL,
-				account_id text NOT NULL,
+				client_id text NOT NULL,
+				client_secret text NOT NULL,
 				token text NOT NULL,
 				network int NOT NULL,
 				UNIQUE KEY (id)
@@ -78,16 +79,52 @@ class SocialPublishAutomate
 			'spa_main_page.php',
 			array($this, 'main_page_render')
 		);
+
+		$accounts = add_submenu_page(
+			'spa_main_page.php',
+			__('Accounts', self::$text_domain),
+			__('Accounts', self::$text_domain),
+			'manage_options',
+			'spa_accounts_page.php',
+			array($this, 'account_page_render')
+		);
+		$groups = add_submenu_page(
+			'spa_main_page.php',
+			__('Groups', self::$text_domain),
+			__('Groups', self::$text_domain),
+			'manage_options',
+			'spa_groups_page.php',
+			array($this, 'group_page_render')
+		);
 	}
 
 	/**
 	 * Render main page template
-	 *
 	 */
 	public function main_page_render()
 	{
 		add_thickbox();
 		require_once('template/main_page.php');
+	}
+
+	/**
+	 * Render account page template
+	 */
+	public function account_page_render()
+	{
+		add_thickbox();
+		wp_enqueue_script('spa_account', plugin_dir_url( __FILE__ ) . 'js/spa_account.js', array('jquery'));
+
+		require_once('template/account_page.php');
+	}
+
+	/**
+	 * Render group page template
+	 */
+	public function group_page_render()
+	{
+		add_thickbox();
+		require_once('template/group.php');
 	}
 
 	/**

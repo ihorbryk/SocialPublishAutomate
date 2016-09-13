@@ -58,6 +58,7 @@ class Publisher
 		foreach ( self::$subscribers as $subscriber ) {
 			$subscriber->publish( $message, $link, $name, $picture, $description );
 		}
+
 	}
 
 	public function subscribe( $subscriber )
