@@ -14,6 +14,15 @@ class Group
 			$this->add($name, $account_id, $network);
 		}
 
+		if ( isset( $_POST['update_spa_group'] ) ) {
+			$id = $_POST['id'];
+			$name = $_POST['name'];
+			$account_id = $_POST['group_id'];
+			$network = $_POST['network'];
+
+			$this->update($id, $name, $account_id, $network);
+		}
+
 		if ( isset( $_GET['delete_group'] ) ) {
 			$this->delete( $_GET['id'] );
 		}
@@ -34,6 +43,26 @@ class Group
 				(name, group_id, network)
 				VALUE
 				('{$name}', '{$group_id}', '{$network}')
+			");
+	}
+	
+	/**
+	 * Update
+	 *
+	 * @param mixed $id
+	 * @param mixed $name
+	 * @param mixed $group_id
+	 * @param mixed $network
+	 */
+	public function update($id, $name, $group_id, $network)
+	{
+		global $wpdb;
+		$table_name = self::$table_name;
+		$result = $wpdb->query("
+				UPDATE
+				{$table_name}
+				SET name='{$name}', group_id='{$group_id}', network='{$network}'
+				WHERE id = {$id}
 			");
 	}
 

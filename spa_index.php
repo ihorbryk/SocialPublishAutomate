@@ -124,6 +124,8 @@ class SocialPublishAutomate
 	public function group_page_render()
 	{
 		add_thickbox();
+		wp_enqueue_script('spa_group', plugin_dir_url( __FILE__ ) . 'js/spa_group.js', array('jquery'));
+
 		require_once('template/group.php');
 	}
 
