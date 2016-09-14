@@ -22,15 +22,19 @@ class Publisher
 
 		self::$triger_term_id = get_option( 'triger_term_id' );
 
-		add_action('save_post', function( $post_id ) {
-			if ( wp_is_post_revision( $post_id ) ) {
-				return;
-			}
-
-			self::check_post( $post_id );
-		});
+		add_action('save_post', array(self::$instance, 'publish_to_social_network_when_save_post')); 
 
 		return self::$instance;
+	}
+
+	public function publish_to_social_network_when_save_post( $post_id ) {
+		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		$upload_dir_info = wp_upload_dir();
+		file_put_contents($upload_dir_info['path'].'/spa_save_post.txt', "Save post --->" . time() . "\n\n", FILE_APPEND);
+		self::check_post( $post_id );
 	}
 
 	static public function publish( $post_id )

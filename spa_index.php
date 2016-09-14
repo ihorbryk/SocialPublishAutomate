@@ -25,7 +25,6 @@ class SocialPublishAutomate
 		$this->group = new Group();
 
 		require_once 'includes/Publisher.php';
-		$this->publisher = Publisher::getInstance();
 		require_once 'includes/Publisher_facebook.php';
 
 		add_action( 'admin_menu', array( $this, 'register_admin_pages') );
@@ -175,10 +174,8 @@ class SocialPublishAutomate
 
 		// проверяем разрешено ли пользователю указывать эти данные
 		if ( 'page' == $_POST['post_type'] && ! current_user_can( 'edit_page', $post_id  )  ) {
-			wp_die('hhh');
 			return $post_id;
 		} elseif( ! current_user_can( 'edit_post', $post_id  )  ) {
-			wp_die('ccc');
 			return $post_id;
 		}
 

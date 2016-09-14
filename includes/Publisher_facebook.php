@@ -20,7 +20,7 @@ class Publisher_facebook
 			curl_close($curl);
 
 			$upload_dir_info = wp_upload_dir();
-			file_put_contents($upload_dir_info['path'].'/spa_log.txt', $destination . " -> " . $out . " -- " . date('j m Y H:i:s') . " -- " . "\n", FILE_APPEND);
+			file_put_contents($upload_dir_info['path'].'/spa_log.txt', $destination . " -> " . $out . " -- " . date('j m Y H:i:s') . " -- " . "--->" . time() . "\n", FILE_APPEND);
 		}, 10, 7 );
 
 	}
@@ -31,6 +31,7 @@ class Publisher_facebook
 		$this->groups = Group::get_groups_by_network( 1 );
 
 		foreach ($this->users as $user) {
+			var_dump( $user );
 
 			$token = $user->token;
 			$client_id = $user->client_id;
@@ -57,14 +58,13 @@ class Publisher_facebook
 
 			foreach ($this->groups as $group) {
 
-				$destination = $group->group_id;
+				var_dump($group);
 
-				var_dump( time() + $time_stamp );
+				$destination = $group->group_id;
 
 				wp_schedule_single_event( time() + $time_stamp, 'post_to_facebook', array( $message, $link, $name, $picture, $description, $token, $destination ) );
 				
 				$time = intval(get_option('time_period'));
-
 				$time_stamp = $time_stamp + $time;
 			}
 		}
