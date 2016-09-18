@@ -24,8 +24,12 @@ class SocialPublishAutomate
 		require_once 'includes/Group.php';
 		$this->group = new Group();
 
+		/* Include publishers */
 		require_once 'includes/Publisher.php';
 		require_once 'includes/Publisher_facebook.php';
+
+		/* uncoment when work with vk.com */
+		/* require_once 'includes/Publisher_vk.php'; */
 
 		add_action( 'admin_menu', array( $this, 'register_admin_pages') );
 		add_action( 'add_meta_boxes', array( $this, 'add_custom_box' ));
@@ -40,7 +44,9 @@ class SocialPublishAutomate
 				name tinytext NOT NULL,
 				client_id text NOT NULL,
 				client_secret text NOT NULL,
+				code text NOT NULL,
 				token text NOT NULL,
+				token_expires text NOT NULL,
 				network int NOT NULL,
 				UNIQUE KEY (id)
 			);";
@@ -95,6 +101,14 @@ class SocialPublishAutomate
 			'spa_groups_page.php',
 			array($this, 'group_page_render')
 		);
+		$token = add_submenu_page(
+			null,
+			__('Get token', self::$text_domain),
+			__('Get token', self::$text_domain),
+			'manage_options',
+			'spa_get_token.php',
+			array($this, 'token_render')
+		);
 	}
 
 	/**
@@ -112,6 +126,7 @@ class SocialPublishAutomate
 	public function account_page_render()
 	{
 		add_thickbox();
+		wp_enqueue_style('spa_account', plugin_dir_url( __FILE__ ) . 'css/spa_account.css');
 		wp_enqueue_script('spa_account', plugin_dir_url( __FILE__ ) . 'js/spa_account.js', array('jquery'));
 
 		require_once('template/account_page.php');
@@ -126,6 +141,16 @@ class SocialPublishAutomate
 		wp_enqueue_script('spa_group', plugin_dir_url( __FILE__ ) . 'js/spa_group.js', array('jquery'));
 
 		require_once('template/group.php');
+	}
+
+	/**
+	 * Render group page template
+	 */
+	public function token_render()
+	{
+		wp_enqueue_script('spa_token', plugin_dir_url( __FILE__ ) . 'js/spa_token.js', array('jquery'));
+
+		require_once('template/token.php');
 	}
 
 	/**

@@ -61,7 +61,7 @@ class Group
 		$result = $wpdb->query("
 				UPDATE
 				{$table_name}
-				SET name='{$name}', group_id='{$group_id}', network='{$network}'
+				SET name='{$name}', group_id='{$group_id}', network={$network}
 				WHERE id = {$id}
 			");
 	}

@@ -1,7 +1,7 @@
 jQuery('document').ready(function($) {
 
 	$('body').on('click', '.group-edit', function() {
-		var groupId = $('.group-id', $(this).parents('.group')).text();
+		var groupId = $('.group-id', $(this).parents('.group')).data('group-id');
 		var socialNetwork = $('.group-network', $(this).parents('.group')).data('network');
 		var groupName = $('.group-name', $(this).parents('.group')).text();
 		var groupPageId = $('.group-page-id', $(this).parents('.group')).text();

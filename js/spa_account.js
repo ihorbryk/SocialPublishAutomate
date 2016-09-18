@@ -17,4 +17,24 @@ jQuery('document').ready(function($) {
 		$('#edit_client_secret').val( clientSecret );
 		$('#edit_token').val( accountToken );
 	});
+
+
+	$('input[name="client_id"]').on('change', function(){
+		if ( $(this).val().length > 1 ) {
+			$('#login_fb').removeClass('hide');
+		}
+	});
+
+	$('#login_fb').on('click', function() {
+		var app_id = $('#client_id').val();
+
+		var url = 'https://www.facebook.com/dialog/oauth';
+		url += '?client_id=' + app_id;
+		url += '&redirect_uri=http://socialposter.local/wp-admin/admin.php?page=spa_get_token.php';
+		url += '&scope=publish_actions';
+
+		window.open(url, '_blank');
+	});
 });
+
+

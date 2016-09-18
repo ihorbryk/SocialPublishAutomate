@@ -21,7 +21,9 @@
 								<th class="column-title column-primary"><?php _e('Account name', self::$text_domain);?></th>
 								<th class="column-title column-primary"><?php _e('Client ID', self::$text_domain);?></th>
 								<th class="column-title column-primary"><?php _e('Client secret', self::$text_domain);?></th>
-								<th class="column-title column-primary"><?php _e('Access Token', self::$text_domain);?></th>
+								<th class="column-title column-primary"><?php _e('Access code', self::$text_domain);?></th>
+								<th class="column-title column-primary"><?php _e('Access token', self::$text_domain);?></th>
+								<!-- <th class="column-title column-primary"><?php _e('Token expires', self::$text_domain);?></th> -->
 								<th class="column-title column-primary"></th>
 							</tr>
 						</thead>
@@ -45,8 +47,19 @@
 								<td class="account-name"><?php echo $account->name;?></td>
 								<td class="account-client-id"><?php echo $account->client_id;?></td>
 								<td class="account-client-secret"><?php echo $account->client_secret;?></td>
-								<td class="account-token"><?php echo $account->token;?></td>
-								
+								<td class="account-code"><?php echo $account->code;?></td>
+								<td class="account-token">
+									<?php if ( empty($account->token) ) : ?>
+										<a href="" class="button">Get token</a>
+									<?php else : ?>
+										<?php echo $account->token; ?>
+									<?php endif; ?>
+								</td>
+								<!-- <?php if ( intval($account->token_expires) != 0 ) : ?>
+									<td class="account-token-expires"><?php echo date('d-m-Y H:i:s', intval($account->token_expires));?></td>
+								<?php else : ?>
+									<td class="account-token-expires"></td>
+								<?php endif; ?> -->
 								<td class="alignright">
 									<?php $link = add_query_arg( array(
 									'delete_account' => 'delete',
@@ -71,6 +84,7 @@
 <div id="add_account" style="display:none;">
 	<p>
 		<h2>Add account</h2>
+
 		<form  method="post">
 			<input type="hidden" name="add_spa_account">
 			<table class="widefat">
@@ -83,7 +97,6 @@
 					<td>
 						<select id="network" name="network" class="widefat">
 							<option value="1">Facebook</option>
-							<option value="2">Vk</option>
 						</select>
 					</td>
 				</tr>
@@ -106,7 +119,7 @@
 						</label>
 					</td>
 					<td>
-						<input type="text" name="client_id" class="widefat">
+						<input type="text" id="client_id" name="client_id" class="widefat">
 					</td>
 				</tr>
 
@@ -122,6 +135,24 @@
 				</tr>
 
 				<tr>
+					<td> </td>
+					<td>
+						<button type="button" class="button hide" id="login_fb"><?php _e('Authorize', self::$text_domain);?></button>
+					</td>
+				</tr>
+
+				<tr>
+					<td class="alignright">
+						<label for="">
+							<strong><?php _e('Code:', self::$text_domain);?></strong>
+						</label>
+					</td>
+					<td>
+						<input type="text" name="code" class="widefat">
+					</td>
+				</tr>
+
+				<!-- <tr>
 					<td class="alignright">
 						<label for="">
 							<strong><?php _e('Token:', self::$text_domain);?></strong>
@@ -130,12 +161,12 @@
 					<td>
 						<textarea type="text" name="token" class="widefat" rows="4"></textarea>
 					</td>
-				</tr>
+				</tr> -->
 				
 				<tr>
 					<td></td>
 					<td>
-						<input type="submit" value="<?php _e('Save', self::$text_domain);?>">
+						<input class="button button-primary" type="submit" value="<?php _e('Save', self::$text_domain);?>">
 					</td>
 				</tr>
 			</table>
@@ -200,18 +231,29 @@
 				<tr>
 					<td class="alignright">
 						<label for="">
+							<strong><?php _e('Code:', self::$text_domain);?></strong>
+						</label>
+					</td>
+					<td>
+						<input type="text" name="code" class="widefat">
+					</td>
+				</tr>
+
+				<!-- <tr>
+					<td class="alignright">
+						<label for="">
 							<strong><?php _e('Token:', self::$text_domain);?></strong>
 						</label>
 					</td>
 					<td>
 						<textarea id="edit_token" type="text" name="token" class="widefat" rows="4"></textarea>
 					</td>
-				</tr>
+				</tr> -->
 				
 				<tr>
 					<td></td>
 					<td>
-						<input type="submit" value="<?php _e('Update', self::$text_domain);?>">
+						<input class="button button-primary" type="submit" value="<?php _e('Update', self::$text_domain);?>">
 					</td>
 				</tr>
 			</table>

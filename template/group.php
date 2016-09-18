@@ -83,7 +83,6 @@
 					<td>
 						<select id="network" name="network">
 							<option value="1">Facebook</option>
-							<option value="2">Vk</option>
 						</select>
 					</td>
 				</tr>
@@ -110,7 +109,7 @@
 				<tr>
 					<td></td>
 					<td>
-						<input type="submit" value="<?php _e('Save', self::$text_domain);?>">
+						<input class="button button-primary" type="submit" value="<?php _e('Save', self::$text_domain);?>">
 					</td>
 				</tr>
 			</table>
@@ -161,7 +160,7 @@
 				<tr>
 					<td></td>
 					<td>
-						<input type="submit" value="<?php _e('Update', self::$text_domain);?>">
+						<input class="button button-primary" type="submit" value="<?php _e('Update', self::$text_domain);?>">
 					</td>
 				</tr>
 			</table>

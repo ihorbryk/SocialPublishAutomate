@@ -12,8 +12,9 @@ class Account
 			$client_secret = $_POST['client_secret'];
 			$network = $_POST['network'];
 			$token = $_POST['token'];
+			$code = $_POST['code'];
 
-			$this->add($name, $client_id, $client_secret,  $token, $network);
+			$this->add($name, $client_id, $client_secret, $code, $token, $network);
 		}
 
 		if ( isset( $_POST['update_spa_account'] ) ) {
@@ -36,18 +37,17 @@ class Account
 	 * Add new account to database
 	 *
 	 */
-	public function add($name, $client_id, $client_secret,  $token, $network)
+	public function add($name, $client_id, $client_secret, $code,  $token = '', $network)
 	{
 		global $wpdb;
 		$table_name = self::$table_name;
 		$result = $wpdb->query("
 				INSERT INTO
 				{$table_name}
-				(name, client_id, client_secret,  token, network)
+				(name, client_id, client_secret, code,  token, network)
 				VALUE
-				('{$name}', '{$client_id}', '{$client_secret}', '{$token}', '{$network}')
+				('{$name}', '{$client_id}', '{$client_secret}', '{$code}', '{$token}', '{$network}')
 			");
-
 	}
 
 	/**
@@ -60,14 +60,14 @@ class Account
 	 * @param mixed $token
 	 * @param mixed $network
 	 */
-	public function update($id, $name, $client_id, $client_secret,  $token, $network)
+	public function update($id, $name, $client_id, $client_secret, $code,  $token, $network)
 	{
 		global $wpdb;
 		$table_name = self::$table_name;
 		$result = $wpdb->query("
 				UPDATE
 				{$table_name}
-				SET name='{$name}', client_id='{$client_id}', client_secret='{$client_secret}',  token='{$token}', network='{$network}'
+				SET name='{$name}', client_id='{$client_id}', client_secret='{$client_secret}', code='{$code}' token='{$token}', network='{$network}'
 				WHERE id = {$id}
 			");
 	}
@@ -87,11 +87,11 @@ class Account
 		return $result;
 	}
 
-	public static function update_token($id, $token)
+	public static function update_token($id, $token, $expiries)
 	{
 		global $wpdb;
 		$table_name = self::$table_name;
-		$result = $wpdb->get_results("UPDATE {$table_name} SET token='{$token}' WHERE id={$id}");
+		$result = $wpdb->get_results("UPDATE {$table_name} SET token='{$token}', token_expires='{$expiries}' WHERE id={$id}");
 		return $result;
 	}
 
