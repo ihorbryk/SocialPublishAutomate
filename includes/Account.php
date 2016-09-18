@@ -2,7 +2,7 @@
 
 class Account
 {
-	static public $table_name = 'spa_accounts';
+	public static $table_name = 'spa_accounts';
 
 	public function __construct()
 	{
@@ -11,7 +11,8 @@ class Account
 			$client_id = $_POST['client_id'];
 			$client_secret = $_POST['client_secret'];
 			$network = $_POST['network'];
-			$token = $_POST['token'];
+			/* $token = $_POST['token']; */
+			$token = '';
 			$code = $_POST['code'];
 
 			$this->add($name, $client_id, $client_secret, $code, $token, $network);

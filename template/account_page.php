@@ -50,7 +50,11 @@
 								<td class="account-code"><?php echo $account->code;?></td>
 								<td class="account-token">
 									<?php if ( empty($account->token) ) : ?>
-										<a href="" class="button">Get token</a>
+										<?php $link = add_query_arg( array(
+										'get_facebook_token' => 'true',
+										'id' => $account->id,
+										) ); ?>
+										<a href="<?php echo $link; ?>" class="button">Get token</a>
 									<?php else : ?>
 										<?php echo $account->token; ?>
 									<?php endif; ?>

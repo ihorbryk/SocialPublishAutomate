@@ -24,7 +24,7 @@ class Publisher_facebook
 		}, 10, 7 );
 
 
-		if ( $_GET['get_facebook_token'] ) {
+		if ( isset( $_GET['get_facebook_token'] ) ) {
 			$this->get_token_by_code( $_GET['id'] );
 		}
 
@@ -74,7 +74,28 @@ class Publisher_facebook
 
 	public function get_token_by_code( $id )
 	{
+		global $wpdb;
+		$table_name = Account::$table_name;
 
+		$account = $wpdb->get_results("SELECT code, client_id, client_secret FROM {$table_name} WHERE id = {$id}");
+
+		if ( isset($account[0]) ) {
+			$account = $account[0];
+
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, "https://graph.facebook.com/v2.7/oauth/access_token");
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER,true);
+			curl_setopt($curl, CURLOPT_POSTFIELDS, "client_id={$account->client_id}&redirect_uri=http://socialposter.local/wp-admin/admin.php?page=spa_get_token.php&client_secret={$account->client_secret}&code={$account->code}");
+			$out = curl_exec($curl);
+			$out = json_decode( $out );
+			$upload_dir_info = wp_upload_dir();
+			file_put_contents($upload_dir_info['path'].'/facebook-tokens.txt', $out->access_token . " -- " . date('j m Y H:i:s') . " -- " . "\n", FILE_APPEND);
+			curl_close($curl);
+
+			if ( isset($out->access_token) ) {
+				$wpdb->query("UPDATE {$table_name} SET code = '', token = '{$out->access_token}' WHERE id = {$id}");
+			}
+		}
 	}
 }
 

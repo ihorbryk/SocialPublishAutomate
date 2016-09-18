@@ -2,6 +2,6 @@
 	<h1>Token</h1>
 
 	<code>
-	<?php $code = $_GET['code']; ?>
+	<?php echo $code = $_GET['code']; ?>
 	</code>
 </div>
