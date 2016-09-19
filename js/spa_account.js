@@ -30,7 +30,7 @@ jQuery('document').ready(function($) {
 
 		var url = 'https://www.facebook.com/dialog/oauth';
 		url += '?client_id=' + app_id;
-		url += '&redirect_uri=http://socialposter.local/wp-admin/admin.php?page=spa_get_token.php';
+		url += '&redirect_uri=http://' + window.location.hostname + '/wp-admin/admin.php?page=spa_get_token.php';
 		url += '&scope=publish_actions';
 
 		window.open(url, '_blank');

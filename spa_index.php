@@ -161,7 +161,9 @@ class SocialPublishAutomate
 	 */
 	public function get_terms()
 	{
-		$terms = get_terms();
+		$terms = get_terms(array(
+			'hide_empty' => false
+		));
 
 		$out = [];
 

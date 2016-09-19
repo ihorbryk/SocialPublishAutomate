@@ -36,7 +36,7 @@
 									<strong><?php _e('Time period to post (in sec)', self::$text_domain);?></strong>
 								</label>
 
-								<input type="text" name="time_period" value="<?php if ( null !== get_option('time_period') ) { echo get_option('time_period'); }?>">
+								<input type="text" name="time_period" value="<?php if ( null !== get_option('time_period') ) { echo get_option('time_period'); }?>" placeholder="0">
 							</p>
 
 							<p>

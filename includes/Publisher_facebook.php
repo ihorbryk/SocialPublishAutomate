@@ -85,7 +85,7 @@ class Publisher_facebook
 			$curl = curl_init();
 			curl_setopt($curl, CURLOPT_URL, "https://graph.facebook.com/v2.7/oauth/access_token");
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER,true);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, "client_id={$account->client_id}&redirect_uri=http://socialposter.local/wp-admin/admin.php?page=spa_get_token.php&client_secret={$account->client_secret}&code={$account->code}");
+			curl_setopt($curl, CURLOPT_POSTFIELDS, "client_id={$account->client_id}&redirect_uri=http://". $_SERVER['HTTP_HOST'] ."/wp-admin/admin.php?page=spa_get_token.php&client_secret={$account->client_secret}&code={$account->code}");
 			$out = curl_exec($curl);
 			$out = json_decode( $out );
 			$upload_dir_info = wp_upload_dir();
