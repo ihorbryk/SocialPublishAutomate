@@ -109,6 +109,14 @@ class SocialPublishAutomate
 			'spa_get_token.php',
 			array($this, 'token_render')
 		);
+		$proxy = add_submenu_page(
+			'spa_main_page.php',
+			__('Proxy', self::$text_domain),
+			__('Proxy', self::$text_domain),
+			'manage_options',
+			'spa_proxy.php',
+			array($this, 'proxy_render')
+		);
 	}
 
 	/**
@@ -144,13 +152,23 @@ class SocialPublishAutomate
 	}
 
 	/**
-	 * Render group page template
+	 * Render token page template
 	 */
 	public function token_render()
 	{
 		wp_enqueue_script('spa_token', plugin_dir_url( __FILE__ ) . 'js/spa_token.js', array('jquery'));
 
 		require_once('template/token.php');
+	}
+
+	/**
+	 * Render proxy page template
+	 */
+	public function proxy_render()
+	{
+		wp_enqueue_script('spa_proxy', plugin_dir_url( __FILE__ ) . 'js/spa_proxy.js', array('jquery'));
+
+		require_once('template/proxy.php');
 	}
 
 	/**
