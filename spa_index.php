@@ -24,6 +24,9 @@ class SocialPublishAutomate
 		require_once 'includes/Group.php';
 		$this->group = new Group();
 
+		require_once 'includes/Proxy.php';
+		$this->proxy = new Proxy();
+
 		/* Include publishers */
 		require_once 'includes/Publisher.php';
 		require_once 'includes/Publisher_facebook.php';
@@ -57,6 +60,13 @@ class SocialPublishAutomate
 				name tinytext NOT NULL,
 				group_id text NOT NULL,
 				network int NOT NULL,
+				UNIQUE KEY (id)
+			);";
+			dbDelta($sql);
+
+			$sql = "CREATE TABLE " . Proxy::$table_name . " (
+				id mediumint(9) NOT NULL AUTO_INCREMENT,
+				proxy_ip tinytext NOT NULL,
 				UNIQUE KEY (id)
 			);";
 			dbDelta($sql);
@@ -136,7 +146,6 @@ class SocialPublishAutomate
 		add_thickbox();
 		wp_enqueue_style('spa_account', plugin_dir_url( __FILE__ ) . 'css/spa_account.css');
 		wp_enqueue_script('spa_account', plugin_dir_url( __FILE__ ) . 'js/spa_account.js', array('jquery'));
-
 		require_once('template/account_page.php');
 	}
 
@@ -147,7 +156,6 @@ class SocialPublishAutomate
 	{
 		add_thickbox();
 		wp_enqueue_script('spa_group', plugin_dir_url( __FILE__ ) . 'js/spa_group.js', array('jquery'));
-
 		require_once('template/group.php');
 	}
 
@@ -157,7 +165,6 @@ class SocialPublishAutomate
 	public function token_render()
 	{
 		wp_enqueue_script('spa_token', plugin_dir_url( __FILE__ ) . 'js/spa_token.js', array('jquery'));
-
 		require_once('template/token.php');
 	}
 
@@ -166,8 +173,8 @@ class SocialPublishAutomate
 	 */
 	public function proxy_render()
 	{
+		add_thickbox();
 		wp_enqueue_script('spa_proxy', plugin_dir_url( __FILE__ ) . 'js/spa_proxy.js', array('jquery'));
-
 		require_once('template/proxy.php');
 	}
 
