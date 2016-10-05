@@ -56,7 +56,7 @@ class Proxy
 		$wpdb->query("DELETE FROM {$table_name} WHERE id = {$id}");
 	}
 
-	public function get_all()
+	public static function get_all()
 	{
 		global $wpdb;
 		$table_name = self::$table_name;

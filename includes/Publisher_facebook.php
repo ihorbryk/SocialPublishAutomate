@@ -10,8 +10,9 @@ class Publisher_facebook
 	{
 		Publisher::getInstance()->subscribe($this);
 
-		add_action( 'post_to_facebook', function( $message, $link, $name, $picture, $description, $token, $destination ) {
+		add_action( 'post_to_facebook', function( $message, $link, $name, $picture, $description, $token, $destination, $proxy ) {
 			$curl = curl_init();
+			curl_setopt($ch, CURLOPT_PROXY, $proxy);
 			curl_setopt($curl, CURLOPT_URL, "https://graph.facebook.com/v2.7/{$destination}/feed");
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER,true);
 			curl_setopt($curl, CURLOPT_POST, true);
@@ -20,7 +21,7 @@ class Publisher_facebook
 			curl_close($curl);
 
 			$upload_dir_info = wp_upload_dir();
-			file_put_contents($upload_dir_info['path'].'/spa_log.txt', $destination . " -> " . $out . " -- " . date('j m Y H:i:s') . " -- " . "--->" . time() . "\n", FILE_APPEND);
+			file_put_contents($upload_dir_info['path'].'/spa_log.txt', $destination . " -> " . $out . " -- " . date('j m Y H:i:s') . " -- " . "--->" . time() . " -- ip : {$proxy} \n", FILE_APPEND);
 		}, 10, 7 );
 
 
@@ -34,6 +35,7 @@ class Publisher_facebook
 	{
 		$this->users = Account::get_users_by_network( 1 );
 		$this->groups = Group::get_groups_by_network( 1 );
+		$this->proxy = Proxy::get_all();
 
 		foreach ($this->users as $user) {
 
@@ -64,7 +66,20 @@ class Publisher_facebook
 
 				$destination = $group->group_id;
 
-				wp_schedule_single_event( time() + $time_stamp, 'post_to_facebook', array( $message, $link, $name, $picture, $description, $token, $destination ) );
+				/* Iterate via proxy array */
+				$proxy = each($this->proxy);
+
+				if ($proxy !== false) {
+					$proxy = $proxy['value']->proxy_ip;
+				} else {
+					reset($this->proxy);
+					$proxy = each($this->proxy);
+					$proxy = $proxy['value']->proxy_ip;
+				}
+
+				file_put_contents($upload_dir_info['path'].'/spa_ip_log.txt', " -- {$proxy} -- " . "\n", FILE_APPEND);
+
+				wp_schedule_single_event( time() + $time_stamp, 'post_to_facebook', array( $message, $link, $name, $picture, $description, $token, $destination, $proxy ) );
 				
 				$time = intval(get_option('time_period'));
 				$time_stamp = $time_stamp + $time;
