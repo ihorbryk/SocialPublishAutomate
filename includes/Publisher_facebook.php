@@ -12,7 +12,9 @@ class Publisher_facebook
 
 		add_action( 'post_to_facebook', function( $message, $link, $name, $picture, $description, $token, $destination, $proxy ) {
 			$curl = curl_init();
-			curl_setopt($ch, CURLOPT_PROXY, $proxy);
+			if (!empty($proxy)) {
+				curl_setopt($ch, CURLOPT_PROXY, $proxy);
+			}
 			curl_setopt($curl, CURLOPT_URL, "https://graph.facebook.com/v2.7/{$destination}/feed");
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER,true);
 			curl_setopt($curl, CURLOPT_POST, true);
