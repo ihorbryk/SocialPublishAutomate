@@ -8,8 +8,6 @@ jQuery('document').ready(function($) {
 		var clientSecret = $('.account-client-secret', $(this).parents('.account')).text();
 		var accountToken = $('.account-token', $(this).parents('.account')).text();
 
-		console.log( socialNetwork );
-
 		$('#edit_account_id').val( accountId );
 		$('#edit_network').val( socialNetwork );
 		$('#edit_name').val( accountName );
@@ -20,18 +18,33 @@ jQuery('document').ready(function($) {
 
 
 	$('input[name="client_id"]').on('change', function(){
+		console.log('Put cliend_id in field');
 		if ( $(this).val().length > 1 ) {
-			$('#login_fb').removeClass('hide');
+			$('.login-button', $(this).parents('form')).removeClass('hide');
 		}
 	});
 
 	$('#login_fb').on('click', function() {
-		var app_id = $('#client_id').val();
+		var app_id = $('#client_id', $(this).parents('form')).val();
 
 		var url = 'https://www.facebook.com/dialog/oauth';
 		url += '?client_id=' + app_id;
 		url += '&redirect_uri=http://' + window.location.hostname + '/wp-admin/admin.php?page=spa_get_token.php';
 		url += '&scope=publish_actions';
+
+		window.open(url, '_blank');
+	});
+
+	
+	$('#login_in').on('click', function() {
+		var app_id = $('#client_id', $(this).parents('form')).val();
+
+		var url = 'https://www.linkedin.com/uas/oauth2/authorization';
+		url += '?client_id=' + app_id;
+		url += '&response_type=code';
+		url += '&state=' + Date.now();
+		url += '&redirect_uri=http://' + window.location.hostname + '/wp-admin/admin.php?page=spa_get_token.php';
+		// url += '&scope=publish_actions';
 
 		window.open(url, '_blank');
 	});

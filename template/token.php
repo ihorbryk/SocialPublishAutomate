@@ -1,5 +1,5 @@
 <div class="wrap">
-	<h1>Token</h1>
+	<h1>Code</h1>
 
 	<code>
 	<?php echo $code = $_GET['code']; ?>

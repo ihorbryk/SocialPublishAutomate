@@ -30,6 +30,8 @@ class SocialPublishAutomate
 		/* Include publishers */
 		require_once 'includes/Publisher.php';
 		require_once 'includes/Publisher_facebook.php';
+		require_once 'includes/Publisher_vk.php';
+		require_once 'includes/Publisher_linkedin.php';
 
 		/* uncoment when work with vk.com */
 		/* require_once 'includes/Publisher_vk.php'; */
