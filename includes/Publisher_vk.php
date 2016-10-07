@@ -15,13 +15,11 @@ class Publisher_vk
 			curl_setopt($curl, CURLOPT_URL, "https://api.vk.com/method/wall.post");
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER,true);
 			curl_setopt($curl, CURLOPT_POST, true);
-			/* curl_setopt($curl, CURLOPT_POSTFIELDS, "access_token={$token}&message={$message}&link={$link}&name={$name}&description={$description}&picture={$picture}"); */
 			curl_setopt($curl, CURLOPT_POSTFIELDS, "access_token={$token}&owner_id=-{$destination}&message={$message}&attachments={$link}");
 			$out = curl_exec($curl);
 			curl_close($curl);
 
 			$upload_dir_info = wp_upload_dir();
-			file_put_contents($upload_dir_info['path'].'/spa_log.txt', $destination . " vk -> " . $out . " -- " . date('j m Y H:i:s') . " -- " . "--->" . time() . "\n", FILE_APPEND);
 		}, 10, 7 );
 
 		if ( isset( $_GET['get_vk_token'] ) ) {
@@ -73,7 +71,6 @@ class Publisher_vk
 			$out = curl_exec($curl);
 			$out = json_decode( $out );
 			echo $_SERVER['HTTP_HOST'];
-			var_dump( $out );
 			$upload_dir_info = wp_upload_dir();
 			curl_close($curl);
 

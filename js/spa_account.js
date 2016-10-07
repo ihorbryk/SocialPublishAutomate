@@ -55,19 +55,6 @@ jQuery('document').ready(function($) {
 		window.open(url, '_blank');
 	});
 
-	
-	$('#login_in').on('click', function() {
-		var app_id = $('#client_id', $(this).parents('form')).val();
-
-		var url = 'https://www.linkedin.com/uas/oauth2/authorization';
-		url += '?client_id=' + app_id;
-		url += '&response_type=code';
-		url += '&state=' + Date.now();
-		url += '&redirect_uri=http://' + window.location.hostname + '/wp-admin/admin.php?page=spa_get_token.php';
-
-		window.open(url, '_blank');
-	});
-	
 	$('#login_vk').on('click', function() {
 		var app_id = $('#client_id', $(this).parents('form')).val();
 

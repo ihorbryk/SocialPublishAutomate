@@ -4,7 +4,6 @@
 		<?php _e('Accounts', self::$text_domain);?>
 		<a href="#TB_inline?width=400&inlineId=add_account_fb" class="page-title-action thickbox"><?php _e('Add Facebook account', self::$text_domain);?></a>
 		<a href="#TB_inline?width=400&inlineId=add_account_vk" class="page-title-action thickbox"><?php _e('Add Vk account', self::$text_domain);?></a>
-		<a href="#TB_inline?width=400&inlineId=add_account_in" class="page-title-action thickbox"><?php _e('Add LinkedIn account', self::$text_domain);?></a>
 	</h1>
 
 	<div id="poststuff">
@@ -36,6 +35,7 @@
 
 							<tr class="account">
 								<td class="account-id"><?php echo $account->id;?></td>
+
 								<?php if ( $account->network == 1) : ?>
 									<td class="account-network" data-network="<?php echo $account->network;?>">
 										<strong>Facebook</strong>
@@ -46,11 +46,7 @@
 										<strong>Vk</strong>
 									</td>
 								<?php endif; ?>
-								<?php if ( $account->network == 3) : ?>
-									<td class="account-network" data-network="<?php echo $account->network;?>">
-										<strong>LinkedIn</strong>
-									</td>
-								<?php endif; ?>
+
 								<td class="account-name"><?php echo $account->name;?></td>
 								<td class="account-client-id"><?php echo $account->client_id;?></td>
 								<td class="account-client-secret"><?php echo $account->client_secret;?></td>
@@ -190,8 +186,6 @@
 		</form>
 	</p>
 </div>
-
-
 <!-- End facebook -->
 
 <!-- Vk -->
@@ -278,89 +272,6 @@
 </div>
 <!-- End vk -->
 
-<!-- LinkedIn -->
-<div id="add_account_in" style="display:none;">
-	<p>
-		<h2>Add LinkedIn account</h2>
-
-		<form  method="post">
-			<input type="hidden" name="add_spa_account">
-			<input type="hidden" name="network" value="3">
-			<table class="widefat">
-				<tr>
-					<td class="alignright">
-						<label for="">
-							<strong><?php _e('Name:', self::$text_domain);?></strong>
-						</label>
-					</td>
-					<td>
-						<input type="text" name="name" class="widefat">
-					</td>
-				</tr>
-
-				<tr>
-					<td class="alignright">
-						<label for="">
-							<strong><?php _e('App id:', self::$text_domain);?></strong>
-						</label>
-					</td>
-					<td>
-						<input type="text" id="client_id" name="client_id" class="widefat">
-					</td>
-				</tr>
-
-				<tr>
-					<td class="alignright">
-						<label for="">
-							<strong><?php _e('App secret:', self::$text_domain);?></strong>
-						</label>
-					</td>
-					<td>
-						<input type="text" name="client_secret" class="widefat">
-					</td>
-				</tr>
-
-				<tr>
-					<td> </td>
-					<td>
-						<button type="button" class="button hide login-button" id="login_in"><?php _e('Authorize', self::$text_domain);?></button>
-					</td>
-				</tr>
-
-				<tr>
-					<td class="alignright">
-						<label for="">
-							<strong><?php _e('Code:', self::$text_domain);?></strong>
-						</label>
-					</td>
-					<td>
-						<input type="text" name="code" class="widefat">
-					</td>
-				</tr>
-
-				<!-- <tr>
-					<td class="alignright">
-						<label for="">
-							<strong><?php _e('Token:', self::$text_domain);?></strong>
-						</label>
-					</td>
-					<td>
-						<textarea type="text" name="token" class="widefat" rows="4"></textarea>
-					</td>
-				</tr> -->
-				
-				<tr>
-					<td></td>
-					<td>
-						<input class="button button-primary" type="submit" value="<?php _e('Save', self::$text_domain);?>">
-					</td>
-				</tr>
-			</table>
-		</form>
-	</p>
-</div>
-<!-- End LinkedIn -->
-
 <!-- Edit -->
 <div id="edit_account" style="display:none;">
 	<p>
@@ -380,7 +291,6 @@
 						<select id="edit_false_network" name="false_network" class="widefat" disabled="disabled">
 							<option value="1">Facebook</option>
 							<option value="2">Vk</option>
-							<option value="3">LinkedIn</option>
 						</select>
 					</td>
 				</tr>

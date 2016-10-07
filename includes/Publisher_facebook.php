@@ -23,7 +23,6 @@ class Publisher_facebook
 			curl_close($curl);
 
 			$upload_dir_info = wp_upload_dir();
-			file_put_contents($upload_dir_info['path'].'/spa_log.txt', $destination . " facebook -> " . $out . " -- " . date('j m Y H:i:s') . " -- " . "--->" . time() . " -- ip : {$proxy} \n", FILE_APPEND);
 		}, 10, 7 );
 
 
@@ -53,7 +52,6 @@ class Publisher_facebook
 			$out = curl_exec($curl);
 			$out = json_decode( $out );
 			$upload_dir_info = wp_upload_dir();
-			file_put_contents($upload_dir_info['path'].'/spa_token_log.txt', $out->access_token . " -- " . date('j m Y H:i:s') . " -- " . "\n", FILE_APPEND);
 			curl_close($curl);
 
 			$new_token = $out->access_token;
@@ -78,8 +76,6 @@ class Publisher_facebook
 					$proxy = each($this->proxy);
 					$proxy = $proxy['value']->proxy_ip;
 				}
-
-				file_put_contents($upload_dir_info['path'].'/spa_ip_log.txt', " -- {$proxy} -- " . "\n", FILE_APPEND);
 
 				wp_schedule_single_event( time() + $time_stamp, 'post_to_facebook', array( $message, $link, $name, $picture, $description, $token, $destination, $proxy ) );
 				
@@ -106,7 +102,6 @@ class Publisher_facebook
 			$out = curl_exec($curl);
 			$out = json_decode( $out );
 			$upload_dir_info = wp_upload_dir();
-			file_put_contents($upload_dir_info['path'].'/facebook-tokens.txt', $out->access_token . " -- " . date('j m Y H:i:s') . " -- " . "\n", FILE_APPEND);
 			curl_close($curl);
 
 			if ( isset($out->access_token) ) {

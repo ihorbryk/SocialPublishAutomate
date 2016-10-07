@@ -84,7 +84,6 @@
 						<select id="network" name="network">
 							<option value="1">Facebook</option>
 							<option value="2">Vk</option>
-							<option value="3">LinkedIn</option>
 						</select>
 					</td>
 				</tr>
