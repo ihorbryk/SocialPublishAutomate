@@ -11,8 +11,7 @@ class Account
 			$client_id = $_POST['client_id'];
 			$client_secret = $_POST['client_secret'];
 			$network = $_POST['network'];
-			/* $token = $_POST['token']; */
-			$token = '';
+			$token = $_POST['token'];
 			$code = $_POST['code'];
 
 			$this->add($name, $client_id, $client_secret, $code, $token, $network);
@@ -24,9 +23,10 @@ class Account
 			$client_id = $_POST['client_id'];
 			$client_secret = $_POST['client_secret'];
 			$network = $_POST['network'];
+			$code = $_POST['code'];
 			$token = $_POST['token'];
 
-			$this->update($id, $name, $client_id, $client_secret,  $token, $network);
+			$this->update($id, $name, $client_id, $client_secret, $code,  $token, $network);
 		}
 
 		if ( isset( $_GET['delete_account'] ) ) {
@@ -38,7 +38,7 @@ class Account
 	 * Add new account to database
 	 *
 	 */
-	public function add($name, $client_id, $client_secret, $code,  $token = '', $network)
+	public function add($name, $client_id, $client_secret, $code = '',  $token = '', $network)
 	{
 		global $wpdb;
 		$table_name = self::$table_name;
@@ -68,7 +68,7 @@ class Account
 		$result = $wpdb->query("
 				UPDATE
 				{$table_name}
-				SET name='{$name}', client_id='{$client_id}', client_secret='{$client_secret}', code='{$code}' token='{$token}', network='{$network}'
+				SET name='{$name}', client_id='{$client_id}', client_secret='{$client_secret}', code='{$code}', token='{$token}', network='{$network}'
 				WHERE id = {$id}
 			");
 	}

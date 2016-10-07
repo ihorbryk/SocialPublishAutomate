@@ -3,6 +3,7 @@
 	<h1>
 		<?php _e('Accounts', self::$text_domain);?>
 		<a href="#TB_inline?width=400&inlineId=add_account_fb" class="page-title-action thickbox"><?php _e('Add Facebook account', self::$text_domain);?></a>
+		<a href="#TB_inline?width=400&inlineId=add_account_vk" class="page-title-action thickbox"><?php _e('Add Vk account', self::$text_domain);?></a>
 		<a href="#TB_inline?width=400&inlineId=add_account_in" class="page-title-action thickbox"><?php _e('Add LinkedIn account', self::$text_domain);?></a>
 	</h1>
 
@@ -65,7 +66,7 @@
 										}
 										if ( $account->network == 2) {
 											$link = add_query_arg( array(
-												'get_facebook_token' => 'true',
+												'get_vk_token' => 'true',
 												'id' => $account->id,
 											) );
 										}
@@ -92,8 +93,8 @@
 									'id' => $account->id,
 									) ); ?>
 
-									<a class="button account-edit thickbox" href="#TB_inline?width=400&inlineId=edit_account"><span class="dashicons dashicons-edit"></span></a>
-									<a class="button" href="<?php echo $link; ?>"><span class="dashicons dashicons-trash"></span></a>
+									<a class="button account-edit thickbox" href="#TB_inline?width=400&height=485&inlineId=edit_account"><span class="dashicons dashicons-edit"></span></a>
+									<a class="button delete" href="<?php echo $link; ?>"><span class="dashicons dashicons-trash"></span></a>
 								</td>
 							</tr>
 
@@ -115,6 +116,7 @@
 		<form  method="post">
 			<input type="hidden" name="add_spa_account">
 			<input type="hidden" name="network" value="1">
+			<input type="hidden" name="token" value="">
 			<table class="widefat">
 				<tr>
 					<td class="alignright">
@@ -189,27 +191,19 @@
 	</p>
 </div>
 
-<div id="edit_account" style="display:none;">
-	<p>
-		<h2>Edit account</h2>
-		<form  method="post">
-			<input type="hidden" name="update_spa_account">
-			<input type="hidden" id="edit_account_id" name="account_id" value="">
-			<table class="widefat">
-				<tr>
-					<td class="alignright">
-						<label for="network">
-							<strong><?php _e('Network:', self::$text_domain);?></strong>
-						</label>
-					</td>
-					<td>
-						<select id="edit_network" name="network" class="widefat">
-							<option value="1">Facebook</option>
-							<option value="2">Vk</option>
-						</select>
-					</td>
-				</tr>
 
+<!-- End facebook -->
+
+<!-- Vk -->
+<div id="add_account_vk" style="display:none;">
+	<p>
+		<h2>Add vk account</h2>
+
+		<form  method="post">
+			<input type="hidden" name="add_spa_account">
+			<input type="hidden" name="network" value="2">
+			<input type="hidden" name="code" value="">
+			<table class="widefat">
 				<tr>
 					<td class="alignright">
 						<label for="">
@@ -217,7 +211,7 @@
 						</label>
 					</td>
 					<td>
-						<input id="edit_name" type="text" name="name" class="widefat">
+						<input type="text" name="name" class="widefat">
 					</td>
 				</tr>
 
@@ -228,7 +222,7 @@
 						</label>
 					</td>
 					<td>
-						<input id="edit_client_id" type="text" name="client_id" class="widefat">
+						<input type="text" id="client_id" name="client_id" class="widefat">
 					</td>
 				</tr>
 
@@ -239,18 +233,25 @@
 						</label>
 					</td>
 					<td>
-						<input id="edit_client_secret" type="text" name="client_secret" class="widefat">
+						<input type="text" name="client_secret" class="widefat">
+					</td>
+				</tr>
+
+				<tr>
+					<td> </td>
+					<td>
+						<button type="button" class="button hide login-button" id="login_vk"><?php _e('Authorize', self::$text_domain);?></button>
 					</td>
 				</tr>
 
 				<tr>
 					<td class="alignright">
 						<label for="">
-							<strong><?php _e('Code:', self::$text_domain);?></strong>
+							<strong><?php _e('Token:', self::$text_domain);?></strong>
 						</label>
 					</td>
 					<td>
-						<input type="text" name="code" class="widefat">
+						<input type="text" name="token" class="widefat">
 					</td>
 				</tr>
 
@@ -261,21 +262,21 @@
 						</label>
 					</td>
 					<td>
-						<textarea id="edit_token" type="text" name="token" class="widefat" rows="4"></textarea>
+						<textarea type="text" name="token" class="widefat" rows="4"></textarea>
 					</td>
 				</tr> -->
 				
 				<tr>
 					<td></td>
 					<td>
-						<input class="button button-primary" type="submit" value="<?php _e('Update', self::$text_domain);?>">
+						<input class="button button-primary" type="submit" value="<?php _e('Save', self::$text_domain);?>">
 					</td>
 				</tr>
 			</table>
 		</form>
 	</p>
 </div>
-<!-- End facebook -->
+<!-- End vk -->
 
 <!-- LinkedIn -->
 <div id="add_account_in" style="display:none;">
@@ -359,3 +360,108 @@
 	</p>
 </div>
 <!-- End LinkedIn -->
+
+<!-- Edit -->
+<div id="edit_account" style="display:none;">
+	<p>
+		<h2>Edit account</h2>
+		<form  method="post">
+			<input type="hidden" name="update_spa_account">
+			<input type="hidden" id="edit_account_id" name="account_id" value="">
+			<input type="hidden" id="edit_network" name="network" value="">
+			<table class="widefat">
+				<tr>
+					<td class="alignright">
+						<label for="network">
+							<strong><?php _e('Network:', self::$text_domain);?></strong>
+						</label>
+					</td>
+					<td>
+						<select id="edit_false_network" name="false_network" class="widefat" disabled="disabled">
+							<option value="1">Facebook</option>
+							<option value="2">Vk</option>
+							<option value="3">LinkedIn</option>
+						</select>
+					</td>
+				</tr>
+
+				<tr>
+					<td class="alignright">
+						<label for="">
+							<strong><?php _e('Name:', self::$text_domain);?></strong>
+						</label>
+					</td>
+					<td>
+						<input id="edit_name" type="text" name="name" class="widefat">
+					</td>
+				</tr>
+
+				<tr>
+					<td class="alignright">
+						<label for="">
+							<strong><?php _e('App id:', self::$text_domain);?></strong>
+						</label>
+					</td>
+					<td>
+						<input id="edit_client_id" type="text" name="client_id" class="widefat">
+					</td>
+				</tr>
+
+				<tr>
+					<td class="alignright">
+						<label for="">
+							<strong><?php _e('App secret:', self::$text_domain);?></strong>
+						</label>
+					</td>
+					<td>
+						<input id="edit_client_secret" type="text" name="client_secret" class="widefat">
+					</td>
+				</tr>
+
+				<tr class="edit_login_fb ">
+					<td> </td>
+					<td>
+						<button type="button" class="button  login-button" id="login_fb"><?php _e('Authorize', self::$text_domain);?></button>
+					</td>
+				</tr>
+
+				<tr class="edit_login_vk ">
+					<td> </td>
+					<td>
+						<button type="button" class="button  login-button" id="login_vk"><?php _e('Authorize', self::$text_domain);?></button>
+					</td>
+				</tr>
+
+				<tr>
+					<td class="alignright">
+						<label for="">
+							<strong><?php _e('Code:', self::$text_domain);?></strong>
+						</label>
+					</td>
+					<td>
+						<input id="edit_code" type="text" name="code" class="widefat">
+					</td>
+				</tr>
+
+				<tr>
+					<td class="alignright">
+						<label for="">
+							<strong><?php _e('Token:', self::$text_domain);?></strong>
+						</label>
+					</td>
+					<td>
+						<textarea id="edit_token" type="text" name="token" class="widefat" rows="4"></textarea>
+					</td>
+				</tr>
+
+				<tr>
+					<td></td>
+					<td>
+						<input class="button button-primary" type="submit" value="<?php _e('Update', self::$text_domain);?>">
+					</td>
+				</tr>
+			</table>
+		</form>
+	</p>
+</div>
+<!-- End edint -->

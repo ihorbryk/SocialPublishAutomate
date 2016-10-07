@@ -23,7 +23,7 @@ class Publisher_facebook
 			curl_close($curl);
 
 			$upload_dir_info = wp_upload_dir();
-			file_put_contents($upload_dir_info['path'].'/spa_log.txt', $destination . " -> " . $out . " -- " . date('j m Y H:i:s') . " -- " . "--->" . time() . " -- ip : {$proxy} \n", FILE_APPEND);
+			file_put_contents($upload_dir_info['path'].'/spa_log.txt', $destination . " facebook -> " . $out . " -- " . date('j m Y H:i:s') . " -- " . "--->" . time() . " -- ip : {$proxy} \n", FILE_APPEND);
 		}, 10, 7 );
 
 
