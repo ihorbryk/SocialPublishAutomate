@@ -33,23 +33,31 @@ class Publisher
 		}
 
 		$upload_dir_info = wp_upload_dir();
-		file_put_contents($upload_dir_info['path'].'/spa_save_post.txt', "Save post --->" . time() . "\n\n", FILE_APPEND);
 		self::check_post( $post_id );
 	}
 
 	static public function publish( $post_id )
 	{
 		$message = get_post_meta( $post_id, 'spa_custom_message', true );
-		$link = get_post_permalink( $post_id );
+
+		$link = get_post_meta( $post_id, 'spa_custom_link', true );
+		var_dump( $link );
+		if ( empty( $link ) ) {
+			$link = get_post_permalink( $post_id );
+		}
+
+
 		$name = get_post_meta( $post_id, 'spa_custom_title', true );
 		if ( empty( $name ) ) {
 			$name = get_the_title( $post_id );
 		}
+
 		$picture = wp_get_attachment_image_src( get_post_thumbnail_id(), 'full');
 		$picture = $picture[0];
 		if ( empty( $picture ) ) {
 			$picture = '';
 		}
+
 		$description = get_post_meta( $post_id, 'spa_custom_description', true );
 		if ( empty( $description ) ) {
 			$content_post = get_post($post_id);

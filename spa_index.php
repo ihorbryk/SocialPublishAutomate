@@ -247,6 +247,11 @@ class SocialPublishAutomate
 			$message = sanitize_text_field( $_POST['spa_custom_message']  );
 			update_post_meta( $post_id, 'spa_custom_message', $message  );
 		}
+		
+		if ( isset( $_POST['spa_custom_link'] ) ) {
+			$link = sanitize_text_field( $_POST['spa_custom_link']  );
+			update_post_meta( $post_id, 'spa_custom_link', $link  );
+		}
 	}
 }
 
