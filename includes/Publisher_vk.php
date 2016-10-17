@@ -27,7 +27,7 @@ class Publisher_vk
 		}
 	}
 
-	public function publish( $message, $link, $name, $picture, $description )
+	public function publish( $message, $link, $name, $picture, $description, $group_lists)
 	{
 		$this->users = Account::get_users_by_network( 2 );
 
@@ -38,7 +38,7 @@ class Publisher_vk
 			$client_secret = $user->client_secret;
 			$client_secret = $user->client_secret;
 
-			$this->groups = Group::get_groups_by_network( $user->network );
+			$this->groups = Group::get_groups_by_network_and_group_lists( $user->network , $group_lists);
 
 			$time_stamp = 0;
 
