@@ -1,8 +1,17 @@
 <div class="wrap">
 
 	<h1>
-		<?php _e('Groups', self::$text_domain);?>
-		<a href="#TB_inline?width=400&height=250&inlineId=add_group" class="page-title-action thickbox">+ <?php _e('Add group', self::$text_domain);?></a>
+		<?php _e('Groups of ', self::$text_domain);?>
+		<?php
+			if (isset( $_GET['group_list'] ) && !empty( $_GET['group_list'] )) {
+				echo Group_lists::get_name_by_id($_GET['group_list']);
+				?>
+					<a href="#TB_inline?width=400&height=250&inlineId=add_group" class="page-title-action thickbox">+ <?php _e('Add group to list', self::$text_domain);?></a>
+				<?php
+			} else {
+				echo "...";
+			}
+		?>
 	</h1>
 
 	<div id="poststuff">
@@ -24,7 +33,10 @@
 							</tr>
 						</thead>
 						<tbody class="the-list">
-							<?php $groups = $this->group->get_all(); ?>
+							<?php
+								if (isset($_GET['group_list']) && !empty($_GET['group_list'])) :
+									$groups = $this->group->get_all($_GET['group_list']);
+							?>
 
 							<?php
 							$counter = 1;
@@ -46,13 +58,13 @@
 								<td class="group-page-id"><?php echo $group->group_id;?></td>
 								
 								<td class="alignright">
-									<?php $link = add_query_arg( array(
-									'delete_group' => 'delete',
-									'id' => $group->id,
-									) ); ?>
 
 									<a class="button group-edit thickbox" href="#TB_inline?width=400&inlineId=edit_group"><span class="dashicons dashicons-edit"></span></a>
-									<a class="button" href="<?php echo $link; ?>"><span class="dashicons dashicons-trash"></span></a>
+									<form method="post" style="display:inline-block;">
+										<input type="hidden" name="delete_spa_group" value="delete">
+										<input type="hidden" name="id" value="<?php echo $group->id; ?>">
+										<button class="button"><span class="dashicons dashicons-trash"></button>
+									</form>
 								</td>
 							</tr>
 
@@ -60,6 +72,10 @@
 							$counter++;
 							endforeach;
 							?>
+
+							<?php else : ?>
+							<td colspan="5"><strong><?php _e('Error. Not set list for view groups', self::$text_domain); ?></strong></td>
+							<?php endif; ?>
 						</tbody>
 					</table>
 				</div>
@@ -73,6 +89,7 @@
 		<h2>Add group</h2>
 		<form  method="post">
 			<input type="hidden" name="add_spa_group">
+			<input type="hidden" name="group_list" value="<?php echo $_GET['group_list']; ?>">
 			<table class="widefat">
 				<tr>
 					<td class="alignright">
@@ -124,6 +141,7 @@
 		<form  method="post">
 			<input type="hidden" name="update_spa_group">
 			<input type="hidden" name="id" id="edit_id">
+			<input type="hidden" name="group_list" value="<?php echo $_GET['group_list']; ?>">
 			<table class="widefat">
 				<tr>
 					<td class="alignright">

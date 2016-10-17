@@ -21,6 +21,12 @@ class SocialPublishAutomate
 		require_once 'includes/Account.php';
 		$this->account = new Account();
 
+		require_once 'includes/Group_lists.php';
+		add_action('admin_enqueue_scripts', function() {
+			wp_enqueue_style('spa_group_list', plugin_dir_url( __FILE__ ) . '/css/spa_group_list.css');
+		});
+		$this->group_lists = new Group_lists();
+
 		require_once 'includes/Group.php';
 		$this->group = new Group();
 
@@ -56,11 +62,20 @@ class SocialPublishAutomate
 			);";
 			dbDelta($sql);
 
+			$sql = "CREATE TABLE " . Group_lists::$table_name . " (
+				id mediumint(9) NOT NULL AUTO_INCREMENT,
+				name tinytext NOT NULL,
+				connected_tag_id int NOT NULL,
+				UNIQUE KEY (id)
+			);";
+			dbDelta($sql);
+
 			$sql = "CREATE TABLE " . Group::$table_name . " (
 				id mediumint(9) NOT NULL AUTO_INCREMENT,
 				name tinytext NOT NULL,
 				group_id text NOT NULL,
 				network int NOT NULL,
+				group_list int NOT NULL,
 				UNIQUE KEY (id)
 			);";
 			dbDelta($sql);
@@ -105,7 +120,7 @@ class SocialPublishAutomate
 			array($this, 'account_page_render')
 		);
 		$groups = add_submenu_page(
-			'spa_main_page.php',
+			null,
 			__('Groups', self::$text_domain),
 			__('Groups', self::$text_domain),
 			'manage_options',
@@ -128,6 +143,14 @@ class SocialPublishAutomate
 			'spa_proxy.php',
 			array($this, 'proxy_render')
 		);
+		$proxy = add_submenu_page(
+			'spa_main_page.php',
+			__('Groups lists', self::$text_domain),
+			__('Groups lists', self::$text_domain),
+			'manage_options',
+			'spa_group_list.php',
+			array($this, 'group_list_render')
+		);
 	}
 
 	/**
@@ -148,6 +171,16 @@ class SocialPublishAutomate
 		wp_enqueue_style('spa_account', plugin_dir_url( __FILE__ ) . 'css/spa_account.css');
 		wp_enqueue_script('spa_account', plugin_dir_url( __FILE__ ) . 'js/spa_account.js', array('jquery'));
 		require_once('template/account_page.php');
+	}
+
+	/**
+	 * Render list page template
+	 */
+	public function group_list_render()
+	{
+		add_thickbox();
+		wp_enqueue_script('spa_group_list', plugin_dir_url( __FILE__ ) . 'js/spa_group_list.js', array('jquery'));
+		require_once('template/group-lists.php');
 	}
 
 	/**
@@ -178,6 +211,7 @@ class SocialPublishAutomate
 		wp_enqueue_script('spa_proxy', plugin_dir_url( __FILE__ ) . 'js/spa_proxy.js', array('jquery'));
 		require_once('template/proxy.php');
 	}
+
 
 	/**
 	 * Get all termr

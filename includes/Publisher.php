@@ -36,12 +36,12 @@ class Publisher
 		self::check_post( $post_id );
 	}
 
-	static public function publish( $post_id )
+	static public function publish( $post_id, $group_lists )
 	{
 		$message = get_post_meta( $post_id, 'spa_custom_message', true );
 
 		$link = get_post_meta( $post_id, 'spa_custom_link', true );
-		var_dump( $link );
+
 		if ( empty( $link ) ) {
 			$link = get_post_permalink( $post_id );
 		}
@@ -54,11 +54,13 @@ class Publisher
 
 		$picture = wp_get_attachment_image_src( get_post_thumbnail_id(), 'full');
 		$picture = $picture[0];
+
 		if ( empty( $picture ) ) {
 			$picture = '';
 		}
 
 		$description = get_post_meta( $post_id, 'spa_custom_description', true );
+
 		if ( empty( $description ) ) {
 			$content_post = get_post($post_id);
 			$content = $content_post->post_content;
@@ -68,7 +70,7 @@ class Publisher
 		}
 
 		foreach ( self::$subscribers as $subscriber ) {
-			$subscriber->publish( $message, $link, $name, $picture, $description );
+			$subscriber->publish( $message, $link, $name, $picture, $description, $group_lists );
 		}
 
 	}
@@ -81,15 +83,13 @@ class Publisher
 
 	static public function check_post( $post_id )
 	{
-		$terms = wp_get_post_terms( $post_id );
+		$terms = get_terms('spa_connected_tag');
+		$group_lists = array();
 
-		$term_ids = [];
 		foreach ($terms as $term) {
-			$term_ids[] = $term->term_id;
+			$group_lists[] = $term->term_id;
 		}
 
-		if ( in_array( self::$triger_term_id, $term_ids ) ) {
-			self::publish( $post_id );
-		}
+		self::publish( $post_id, $group_lists );
 	}
 }

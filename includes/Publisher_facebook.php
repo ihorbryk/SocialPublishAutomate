@@ -32,10 +32,10 @@ class Publisher_facebook
 
 	}
 
-	public function publish( $message, $link, $name, $picture, $description )
+	public function publish( $message, $link, $name, $picture, $description, $group_lists )
 	{
 		$this->users = Account::get_users_by_network( 1 );
-		$this->groups = Group::get_groups_by_network( 1 );
+		$this->groups = Group::get_groups_by_network_and_group_lists( 1 , $group_lists);
 		$this->proxy = Proxy::get_all();
 
 		foreach ($this->users as $user) {
