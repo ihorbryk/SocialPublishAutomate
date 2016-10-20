@@ -32,7 +32,6 @@ class Publisher
 			return;
 		}
 
-		$upload_dir_info = wp_upload_dir();
 		self::check_post( $post_id );
 	}
 

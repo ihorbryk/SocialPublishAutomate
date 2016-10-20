@@ -186,7 +186,9 @@ class Group_lists
 	public static function get_id_by_connected_tag_id($id) {
 		global $wpdb;
 		$table_name = self::$table_name;
-		$result = $wpdb->get_var("SELECT id FROM {$table_name}");
+
+		$result = $wpdb->get_var("SELECT id FROM {$table_name} WHERE connected_tag_id = {$id}");
+
 		return $result;
 	}
 }

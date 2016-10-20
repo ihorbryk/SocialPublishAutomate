@@ -113,6 +113,7 @@ class Group
 
 		global $wpdb;
 		$table_name = self::$table_name;
+
 		$result = [];
 
 		foreach ($group_lists as $connected_tag_id) {

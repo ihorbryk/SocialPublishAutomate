@@ -5,53 +5,90 @@ class Publisher_vk
 	private $token;
 	private $users;
 	private $groups;
+	private $proxy;
 
 	public function __construct()
 	{
+		require_once __DIR__ . '/lib/Threads.php';
+
 		Publisher::getInstance()->subscribe($this);
-
-		add_action( 'post_to_vk', function( $message, $link, $name, $picture, $description, $token, $destination ) {
-			$curl = curl_init();
-			curl_setopt($curl, CURLOPT_URL, "https://api.vk.com/method/wall.post");
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER,true);
-			curl_setopt($curl, CURLOPT_POST, true);
-			curl_setopt($curl, CURLOPT_POSTFIELDS, "access_token={$token}&owner_id=-{$destination}&message={$message}&attachments={$link}");
-			$out = curl_exec($curl);
-			curl_close($curl);
-
-			$upload_dir_info = wp_upload_dir();
-		}, 10, 7 );
 
 		if ( isset( $_GET['get_vk_token'] ) ) {
 			$this->get_token_by_code( $_GET['id'] );
 		}
 	}
 
-	public function publish( $message, $link, $name, $picture, $description, $group_lists)
-	{
-		$this->users = Account::get_users_by_network( 2 );
+	public function publish( $message, $link, $name, $picture, $description, $group_lists ) {
 
-		foreach ($this->users as $user) {
-			$token = $user->token;
-			$code = $user->code;
-			$client_id = $user->client_id;
-			$client_secret = $user->client_secret;
-			$client_secret = $user->client_secret;
+		$users   = $this->users = Account::get_users_by_network( 2 );
+		$groups = $this->groups = Group::get_groups_by_network_and_group_lists( 2, $group_lists );
+		$proxy_arr  = $this->proxy = Proxy::get_all();
 
-			$this->groups = Group::get_groups_by_network_and_group_lists( $user->network , $group_lists);
+//		Установим время выполнения скрипта
+		$time_count = count($groups);
+		$time_execution = ($time_count * 60) + 1000;
 
-			$time_stamp = 0;
+		set_time_limit($time_execution);
 
-			foreach ($this->groups as $group) {
+		$Thread = new Thread();
 
-				$destination = $group->group_id;
+		$Thread->Create( function () use ( $users, $groups, $proxy_arr, $message, $link, $name, $picture, $description, $group_lists ) {
 
-				wp_schedule_single_event( time() + $time_stamp, 'post_to_vk', array( $message, $link, $name, $picture, $description, $token, $destination ) );
-				
-				$time = intval(get_option('time_period'));
-				$time_stamp = $time_stamp + $time;
+//			Debug option
+//			ob_start();
+
+			foreach ( $users as $user_item ) {
+
+				$token         = $user_item->token;
+
+				foreach ( $groups as $group ) {
+
+					$destination = $group->group_id;
+
+					$curl = curl_init();
+
+					if ( ! empty( $proxy_arr ) ) {
+						/* Iterate via proxy array */
+						$proxy = each( $proxy_arr );
+
+						if ( $proxy !== false ) {
+							$proxy = $proxy['value']->proxy_ip;
+						} else {
+							reset( $proxy_arr );
+							$proxy = each( $proxy_arr );
+							$proxy = $proxy['value']->proxy_ip;
+						}
+
+						if ( ! empty( $proxy ) ) {
+							curl_setopt( $curl, CURLOPT_PROXY, $proxy );
+						}
+					}
+
+					curl_setopt($curl, CURLOPT_URL, "https://api.vk.com/method/wall.post");
+					curl_setopt($curl, CURLOPT_RETURNTRANSFER,true);
+					curl_setopt($curl, CURLOPT_POST, true);
+					curl_setopt($curl, CURLOPT_POSTFIELDS, "access_token={$token}&owner_id=-{$destination}&message={$message}&attachments={$link}");
+					$out = curl_exec($curl);
+					curl_close($curl);
+
+//					var_dump($out);
+
+					$time       = intval( get_option( 'time_period' ) );
+
+					if ( is_int($time) ) {
+						sleep($time);
+					}
+
+				}
 			}
-		}
+
+//			$screen = ob_get_contents();
+//			file_put_contents('result-screen.txt', $screen . "--**\r\n", FILE_APPEND);
+//			ob_end_clean();
+
+		});
+
+		$Thread->Run();
 	}
 
 	public function get_token_by_code( $id )
@@ -71,7 +108,6 @@ class Publisher_vk
 			$out = curl_exec($curl);
 			$out = json_decode( $out );
 			echo $_SERVER['HTTP_HOST'];
-			$upload_dir_info = wp_upload_dir();
 			curl_close($curl);
 
 			if ( isset($out->access_token) ) {
